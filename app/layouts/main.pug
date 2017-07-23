@@ -1,0 +1,15 @@
+include ../blocks/footer/footer
+include ../blocks/header/header
+
+block pageInfo
+
+doctype html
+html(lang='ru')
+  include ../blocks/head/head
+  body(class="page page-" + page.name)
+    +header()
+    block content
+    +footer()
+    block vendors
+    block scripts
+      script(src="scripts/main.min.js")

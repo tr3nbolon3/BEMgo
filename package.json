@@ -1,0 +1,42 @@
+{
+  "name": "bemgo",
+  "version": "1.0.0",
+  "description": "Starting template for the layout",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Haliont/BEMgo.git"
+  },
+  "keywords": [
+    "template",
+    "bem",
+    "starterkit"
+  ],
+  "author": "Konstantin Zemliakov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Haliont/BEMgo/issues"
+  },
+  "homepage": "https://github.com/Haliont/BEMgo#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-cache": "^0.4.6",
+    "gulp-clean-css": "^3.7.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-html-prettify": "0.0.1",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-merge-media-queries": "^0.2.1",
+    "gulp-notify": "^3.0.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.3.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^3.0.0",
+    "rimraf": "^2.6.1"
+  }
+}
