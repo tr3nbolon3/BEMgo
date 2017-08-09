@@ -7,7 +7,7 @@ const gulp        = require('gulp'),                       // Сам gulp
       sass        = require('gulp-sass'),                  // Плагин для компиляции sass в css
       concat      = require('gulp-concat'),                // Плагин для объединения файлов
       plumber     = require('gulp-plumber'),               // Плагин для продолжения работы gulp, если вызвана ошибка
-      rimraf      = require('rimraf'),                     // Модуль удаления директорий
+      clean       = require('gulp-clean'),                 // Плагин для удаления файлов/директорий
       cache       = require('gulp-cache'),                 // Модуль для работы с кешом
       mmq         = require('gulp-merge-media-queries'),   // Плагин для обхединения media-queries
       prefix      = require('gulp-autoprefixer'),          // Плагин для автоматической расстановки вендорных префиксов
@@ -15,7 +15,7 @@ const gulp        = require('gulp'),                       // Сам gulp
       imagemin    = require('gulp-imagemin'),              // Плагин для скижитя графики
       browserSync = require('browser-sync').create(),      // Плагин для запуска локального сервера
       notify      = require('gulp-notify'),                // Плагин для оповещения об ошибках
-      prettify    = require('gulp-html-prettify');
+      prettify    = require('gulp-html-prettify');         // Плагин, приводящий html в порядок
 
 
 var paths = {
@@ -23,10 +23,12 @@ var paths = {
   outputDir: 'dist/'       // Путь для конечной сборки
 }
 
+
+// Компиляция PUG в HTML
 gulp.task('pug', function() {
   return gulp
-    .src(paths.devDir + 'pages/*.pug')
-    .pipe(plumber({
+    .src(paths.devDir + 'pages/*.pug')              // Берем файлы из рабочей директории
+    .pipe(plumber({                                 // Выводим ошибку в случаее её присутствия
       errorHandler: notify.onError(function(err) {
         return {
           title: 'Pug',
@@ -34,17 +36,14 @@ gulp.task('pug', function() {
         };
       })
     }))
-    .pipe(pug({
-      pretty: true
-    }))
-    .pipe(prettify({
+    .pipe(prettify({                                // Делаем HTML читабельным
       brace_style: 'expand',
       indent_size: 1,
       indent_char: '\t',
       indent_inner_html: true,
       preserve_newlines: true
     }))
-    .pipe(gulp.dest(paths.outputDir))
+    .pipe(gulp.dest(paths.outputDir))               // Кидаем файлы в папку билда
     .pipe(browserSync.stream());
 });
 
@@ -76,7 +75,7 @@ gulp.task('sass', function() {
 // Минификация кастомных скриптов JS
 gulp.task('js', function() {
   return gulp
-    .src([paths.devDir + 'scripts/*.js'])
+    .src(paths.devDir + 'scripts/*.js')
     .pipe(uglify())
     .pipe(rename({
         suffix: '.min'
@@ -85,9 +84,10 @@ gulp.task('js', function() {
     .pipe(browserSync.stream());
 });
 
-//Оптимизируем изображения и кидаем их в кэш
+// Оптимизируем изображения
 gulp.task('img', function() {
-  return gulp.src(paths.devDir + 'img/**/*')
+  return gulp
+    .src(paths.devDir + 'img/**/*')
     .pipe(cache(imagemin(
       [imagemin.gifsicle(),
       imagemin.jpegtran(), imagemin.optipng()]
@@ -117,12 +117,14 @@ gulp.task('default', ['img', 'sass', 'pug', 'js', 'browser-sync'], function() {
   gulp.watch(paths.outputDir + '*.html', browserSync.reload);
 });
 
-//Очистка папки конечной сборки
-gulp.task('clean', function(cb) {
-  rimraf(paths.outputDir, cb);
+// Чистим кэш
+gulp.task('clear', function() {
+  return cache.clearAll();
 });
 
-//Чистим кэш
-gulp.task('clear', function() {
-    return cache.clearAll();
+// Удаление папки билда
+gulp.task('clean', function() {
+  return gulp
+    .src('dist', {read: false})
+    .pipe(clean());
 });

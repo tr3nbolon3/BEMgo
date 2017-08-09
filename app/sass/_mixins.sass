@@ -17,10 +17,24 @@
 
 
 // Центрирование абсолютно позиционированного элемента по вертикали
-=absolute-center()
+=abs-center-y()
   position: absolute
   top: 50%
   transform: translateY(-50%)
+
+
+// Центрирование абсолютно позиционированного элемента по горизонтали
+=abs-center-x()
+  position: absolute
+  top: 50%
+  transform: translateX(-50%)
+
+
+// Центрирование абсолютно позиционированного элемента по обеим осям
+=abs-center()
+  position: absolute
+  top: 50%
+  transform: translate(-50%, -50%)
 
 
 // Сброс обтекания для плавающих блоков-потомков
@@ -68,7 +82,6 @@
   line-height: normal
 
 
-
 // Красивое обрезание лишнего текста
 =text-overflow()
   overflow: hidden
@@ -110,8 +123,8 @@
 
 
 // Фоновая картинка
-=image-bg($name)
-  background-image: url('../images/#{name}')
+=img-bg($name)
+  background-image: url('../images/#{$name}')
   background-size: cover
 
 

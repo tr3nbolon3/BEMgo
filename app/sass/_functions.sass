@@ -1,0 +1,7 @@
+// Перевод px в rem
+@function rem($size, $baseSize: $fontSize)
+  @return $size / $baseSize * 1rem
+
+// Перевод px в em
+@function rem($size, $parentSize: $fontSize)
+  @return $size / $parentSize * 1em
