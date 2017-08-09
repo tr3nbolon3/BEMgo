@@ -15,7 +15,11 @@ const gulp        = require('gulp'),                       // Сам gulp
       imagemin    = require('gulp-imagemin'),              // Плагин для скижитя графики
       browserSync = require('browser-sync').create(),      // Плагин для запуска локального сервера
       notify      = require('gulp-notify'),                // Плагин для оповещения об ошибках
-      prettify    = require('gulp-html-prettify');         // Плагин, приводящий html в порядок
+      prettify    = require('gulp-html-prettify'),         // Плагин, приводящий html в порядок
+      svgSprite   = require('gulp-svg-sprite'),            // Плагин для сборки svg-спрайта
+      svgmin      = require('gulp-svgmin'),                // Плагин для минимизации svg
+      cheerio     = require('gulp-cheerio'),               // Плагин для манипуляции HTML и XML
+      replace     = require('gulp-replace');               // Плагин для изменения строк
 
 
 var paths = {
@@ -82,6 +86,40 @@ gulp.task('js', function() {
     }))
     .pipe(gulp.dest(paths.outputDir + 'scripts/'))
     .pipe(browserSync.stream());
+});
+
+// Сборка svg-спрайта
+gulp.task('svg:sprite', function() {
+  return gulp
+    .src([paths.devDir + 'svg/*.svg', '!' + paths.devDir + 'svg/sprite.svg'])
+    .pipe(svgmin({
+      js2svg: {
+        pretty: true
+      }
+    }))
+    .pipe(cheerio({
+      run: function ($) {
+        $('[fill]').removeAttr('fill');
+        $('[stroke]').removeAttr('stroke');
+        $('[style]').removeAttr('style');
+        $('style').remove();
+      },
+      parserOptions: {xmlMode: true}
+    }))
+    .pipe(replace('&gt;', '>'))
+    .pipe(svgSprite({
+      mode: {
+        symbol: {
+          sprite: "../sprite.svg"
+        }
+      }
+    }))
+    .pipe(cheerio({
+      run: function ($) {
+        $('svg').attr('style', 'display: none');
+      }
+    }))
+    .pipe(gulp.dest(paths.devDir + 'svg/'));
 });
 
 // Оптимизируем изображения
