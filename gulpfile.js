@@ -40,6 +40,7 @@ gulp.task('pug', function() {
         };
       })
     }))
+    .pipe(pug())
     .pipe(prettify({                                // Делаем HTML читабельным
       brace_style: 'expand',
       indent_size: 1,
