@@ -5,7 +5,7 @@ touch app/blocks/$1/$1.pug
 
 sed -i -e '1 s/^/include ..\/blocks\/'$1'\/'$1'\n/;' app/layouts/main.pug
 echo -e "@import '../blocks/$1/$1'" >> app/sass/main.sass
-echo -e "mixin $1()\n  div.$1" >> app/blocks/$1/$1.pug
+echo -e "mixin $1()\n  div.$1&attributes(attributes)" >> app/blocks/$1/$1.pug
 echo -e ".$1\n  " >> app/blocks/$1/$1.sass
 
 echo "Блок $1 создан"
