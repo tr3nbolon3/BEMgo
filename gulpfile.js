@@ -20,6 +20,7 @@ const gulp        = require('gulp'),                       // Сам gulp
       svgmin      = require('gulp-svgmin'),                // Плагин для минимизации svg
       cheerio     = require('gulp-cheerio'),               // Плагин для манипуляции HTML и XML
       replace     = require('gulp-replace');               // Плагин для изменения строк
+      webpack     = require('webpack-stream');             // Сборщик скриптов
 
 
 var paths = {
@@ -81,6 +82,26 @@ gulp.task('sass', function() {
 gulp.task('js', function() {
   return gulp
     .src(paths.devDir + 'scripts/*.js')
+    .pipe(webpack({
++      watch: true,
++      output: {
++        filename: './[name].js'
++      },
++      module: {
++        rules: [
++          {
++            test: /\.js$/,
++            exclude: /(node_modules|bower_components)/,
++            use: {
++              loader: 'babel-loader',
++              options: {
++                presets: ['env']
++              }
++            }
++          }
++        ]
++      }
++    }))
     .pipe(uglify())
     .pipe(rename({
         suffix: '.min'
